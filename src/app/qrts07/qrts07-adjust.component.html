@@ -1,0 +1,239 @@
+<app-shell-header title="ตรวจนับสินค้า" (back)="back()"></app-shell-header>
+
+<!-- Head info -->
+<div class="container mb-3">
+  <div class="row align-items-center">
+    <div class="col-1 text-center my-auto">
+      <i class="fa-solid fa-car fa-2xl text-warning"></i>
+    </div>
+    <div class="col-11 d-flex flex-wrap gap-2">
+      <span class="badge rounded-pill text-bg-warning">
+        วันที่นับ {{ head?.preparedate | thaidate }}
+      </span>
+      <span class="badge rounded-pill text-bg-warning" *ngIf="head?.wareHouseName">
+        คลัง {{ head.wareHouseName }}
+      </span>
+      <span class="badge rounded-pill text-bg-warning" *ngIf="head?.productCategoryName">
+        {{ head.productCategoryName }}
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- Action buttons (Scan / Manual) -->
+<div class="container mb-3">
+  <div class="row g-2">
+    <div class="col-6">
+      <button matRipple class="btn btn-mobile w-100" type="button" (click)="openScan()"
+              [disabled]="!isEditable()">
+        <i class="fa-solid fa-qrcode me-2"></i>สแกน QR Code
+      </button>
+    </div>
+    <div class="col-6">
+      <button matRipple class="btn btn-mobile-secondary w-100" type="button" (click)="openManual()"
+              [disabled]="!isEditable()">
+        กรอกข้อมูล
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Filter + Counts -->
+<div class="container">
+  <input class="form-control-c mb-2" placeholder="เลขทะเบียน"
+         [value]="term"
+         (change)="searchByLicense($any($event.target).value)" />
+
+  <div class="row text-start mt-2 mb-2 align-items-center">
+    <div class="col">
+      <span>จำนวนรวม</span>
+      <span class="text-warning fw-semibold mx-1">{{ head?.totalCount | number }}</span>
+      <span>คัน</span>
+
+      <span class="ms-2">ตรวจนับแล้ว</span>
+      <span class="text-warning fw-semibold mx-1">{{ head?.countedCount | number }}</span>
+      <span>คัน</span>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col d-flex flex-wrap gap-2">
+      <span>พบ</span>
+      <span class="badge rounded-pill text-bg-success">{{ head?.foundCount | number }}</span>
+      <span>ขาด</span>
+      <span class="badge rounded-pill text-bg-danger">{{ head?.notFoundCount | number }}</span>
+      <span>เกิน</span>
+      <span class="qrts07-excess-badge badge rounded-pill">{{ head?.excessCount | number }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- Items list -->
+<div class="container">
+  <ul class="list-unstyled">
+    <li *ngFor="let item of head?.phyCounts" class="list-group-item mb-2 p-2 border rounded bg-white">
+      <div class="d-flex">
+        <div class="me-3" style="cursor:pointer" (click)="notFound(item)">
+          <i class="fa-solid fa-clipboard fa-2xl" [ngClass]="iconClass(item)"></i>
+        </div>
+        <div class="flex-grow-1">
+          <div class="fs-5 fw-semibold sarabun">
+            {{ item.licensePlateNo }} {{ item.provinceName }}
+          </div>
+          <div class="text-warning">
+            {{ item.brandName }} {{ item.modelName }} {{ item.color }} {{ item.year }}
+          </div>
+          <div class="text-gray fs-6" *ngIf="item.oceng">OCENG# : {{ item.oceng }}</div>
+          <div class="text-gray fs-6" *ngIf="item.bodyCode">BODY : {{ item.bodyCode }}</div>
+          <div class="text-gray fs-6" *ngIf="item.contractNo">CONTRACT : {{ item.contractNo }}</div>
+          <div class="text-gray fs-6" *ngIf="item.remark">หมายเหตุ : {{ item.remark }}</div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- Footer (Complete / Pullback) -->
+<div class="container mobile-footer" *ngIf="isCompletable() || isPullbackable()">
+  <button *ngIf="isCompletable()" matRipple class="btn btn-mobile" type="button" (click)="complete()">
+    ตรวจนับครบ
+  </button>
+  <button *ngIf="isPullbackable()" matRipple class="btn btn-mobile" type="button" (click)="pullback()">
+    ดึงกลับ
+  </button>
+</div>
+
+
+<!-- ===================== Modals & slide-over templates ===================== -->
+
+<!-- Mock scan picker -->
+<ng-template #scanPanel>
+  <p class="text-muted">
+    เลือก QR Code (จำลองการสแกน) — รายการที่ขึ้นต้นด้วย <em>[เกิน]</em> คือรถนอกรอบนับเดิม
+  </p>
+  <select class="form-select-c mb-3" [formControl]="scanPicker">
+    <option [ngValue]="null">-- เลือก --</option>
+    <option *ngFor="let o of scanOptions" [ngValue]="o.value">{{ o.label }}</option>
+  </select>
+  <div class="d-flex gap-2">
+    <button class="btn btn-mobile" type="button" (click)="scanPick(scanPicker.value!)" [disabled]="!scanPicker.value">
+      สแกน
+    </button>
+  </div>
+</ng-template>
+
+<!-- Confirm: Found -->
+<ng-template #confirmFound>
+  <p class="fs-6 fw-semibold">
+    {{ scanResult?.licensePlateNo }} {{ scanResult?.provinceName }}
+    <span class="badge rounded-pill text-bg-success ms-2">พบ</span>
+  </p>
+  <p class="text-warning">{{ scanResult?.brandName }} {{ scanResult?.modelName }} {{ scanResult?.color }} {{ scanResult?.year }}</p>
+  <p class="text-gray fs-6">วันที่รับเข้า : {{ scanResult?.receivedDate | thaidate }}</p>
+  <p class="text-gray fs-6">วันที่ปล่อย : {{ (scanResult?.releaseDate | thaidate) || '-' }}</p>
+  <p class="text-gray fs-6">ผู้ขาย : {{ scanResult?.sellerName || '-' }}</p>
+  <p class="text-gray fs-6">เลขที่สัญญา : {{ scanResult?.contractNo }}</p>
+  <p class="text-gray fs-6">เลขเครื่อง : {{ scanResult?.oceng }}</p>
+  <p class="text-gray fs-6">เลขตัวถัง : {{ scanResult?.bodyCode }}</p>
+  <div class="mb-2">
+    <label class="form-label-c">หมายเหตุ</label>
+    <textarea class="form-control-c" rows="2" [formControl]="confirmRemark"></textarea>
+  </div>
+  <div class="modal-action">
+    <button type="button" class="btn btn-mobile" (click)="acceptFound()">ตกลง</button>
+  </div>
+</ng-template>
+
+<!-- Confirm: NotFound -->
+<ng-template #confirmNotFound>
+  <p class="fs-6 fw-semibold">
+    {{ scanResult?.licensePlateNo }} {{ scanResult?.provinceName }}
+    <span class="badge rounded-pill text-bg-danger ms-2">ขาด</span>
+  </p>
+  <p class="text-warning">{{ scanResult?.brandName }} {{ scanResult?.modelName }} {{ scanResult?.color }} {{ scanResult?.year }}</p>
+  <p class="text-gray fs-6">เลขที่สัญญา : {{ scanResult?.contractNo }}</p>
+  <p class="text-gray fs-6">เลขเครื่อง : {{ scanResult?.oceng }}</p>
+  <p class="text-gray fs-6">เลขตัวถัง : {{ scanResult?.bodyCode }}</p>
+  <div class="mb-2">
+    <label class="form-label-c">สาเหตุ <span class="text-danger">*</span></label>
+    <select class="form-select-c" [formControl]="confirmReason">
+      <option [ngValue]="null">-- เลือก --</option>
+      <option *ngFor="let r of master.reasons" [ngValue]="r.value">{{ r.label }}</option>
+    </select>
+    <div *ngIf="confirmReason.touched && confirmReason.invalid" class="form-error">กรุณาเลือกสาเหตุ</div>
+  </div>
+  <div class="mb-2">
+    <label class="form-label-c">หมายเหตุ</label>
+    <textarea class="form-control-c" rows="2" [formControl]="confirmRemark"></textarea>
+  </div>
+  <div class="modal-action">
+    <button type="button" class="btn btn-mobile" (click)="acceptNotFound()">ตกลง</button>
+    <button type="button" class="btn btn-mobile-secondary" (click)="cancelNotFound()">ยกเลิก</button>
+  </div>
+</ng-template>
+
+<!-- Confirm: Excess -->
+<ng-template #confirmExcess>
+  <p class="fs-6 fw-semibold">
+    {{ scanResult?.licensePlateNo }} {{ scanResult?.provinceName }}
+    <span class="qrts07-excess-badge badge rounded-pill ms-2">เกิน</span>
+  </p>
+  <p class="text-warning">{{ scanResult?.brandName }} {{ scanResult?.modelName }} {{ scanResult?.color }} {{ scanResult?.year }}</p>
+  <p class="text-gray fs-6">เลขที่สัญญา : {{ scanResult?.contractNo }}</p>
+  <p class="text-gray fs-6">เลขเครื่อง : {{ scanResult?.oceng }}</p>
+  <p class="text-gray fs-6">เลขตัวถัง : {{ scanResult?.bodyCode }}</p>
+  <div class="mb-2">
+    <label class="form-label-c">สาเหตุ <span class="text-danger">*</span></label>
+    <select class="form-select-c" [formControl]="confirmReason">
+      <option [ngValue]="null">-- เลือก --</option>
+      <option *ngFor="let r of master.reasons" [ngValue]="r.value">{{ r.label }}</option>
+    </select>
+    <div *ngIf="confirmReason.touched && confirmReason.invalid" class="form-error">กรุณาเลือกสาเหตุ</div>
+  </div>
+  <div class="mb-2">
+    <label class="form-label-c">หมายเหตุ</label>
+    <textarea class="form-control-c" rows="2" [formControl]="confirmRemark"></textarea>
+  </div>
+  <p class="mt-2">สแกนต่อหรือไม่?</p>
+  <div class="modal-action">
+    <button type="button" class="btn btn-mobile" (click)="acceptExcessContinue()">สแกนต่อ</button>
+    <button type="button" class="btn btn-mobile-secondary" (click)="acceptExcessFinish()">จบ</button>
+  </div>
+</ng-template>
+
+<!-- Manual entry -->
+<ng-template #manualEntry>
+  <form [formGroup]="manualForm">
+    <div class="mb-2">
+      <label class="form-label-c">เลขทะเบียน</label>
+      <select class="form-select-c" formControlName="licensePlateNo">
+        <option [ngValue]="null">-- เลือก --</option>
+        <option *ngFor="let p of master.licensePlateNos" [ngValue]="p.value">{{ p.label }}</option>
+      </select>
+    </div>
+    <div class="mb-2">
+      <label class="form-label-c">CONTRACT <span class="text-danger">*</span></label>
+      <select class="form-select-c" formControlName="contractNo">
+        <option [ngValue]="null">-- เลือก --</option>
+        <option *ngFor="let c of master.contracts" [ngValue]="c.value">{{ c.label }}</option>
+      </select>
+      <div *ngIf="manualForm.controls['contractNo'].touched && manualForm.controls['contractNo'].invalid" class="form-error">
+        กรุณาเลือก CONTRACT
+      </div>
+    </div>
+    <div class="mb-2">
+      <label class="form-label-c">BODY <span class="text-danger">*</span></label>
+      <select class="form-select-c" formControlName="bodyCode">
+        <option [ngValue]="null">-- เลือก --</option>
+        <option *ngFor="let b of (bodies$ | async)" [ngValue]="b.value">{{ b.label }}</option>
+      </select>
+      <div *ngIf="manualForm.controls['bodyCode'].touched && manualForm.controls['bodyCode'].invalid" class="form-error">
+        กรุณาเลือก BODY
+      </div>
+    </div>
+  </form>
+  <div class="modal-action">
+    <button type="button" class="btn btn-mobile" (click)="acceptManual()">ตกลง</button>
+    <button type="button" class="btn btn-mobile-secondary" (click)="manualDialogRef?.close(false)">ล้าง</button>
+  </div>
+</ng-template>

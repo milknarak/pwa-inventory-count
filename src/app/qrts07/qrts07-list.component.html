@@ -1,0 +1,89 @@
+<app-shell-header title="ตรวจนับสินค้า" [showBack]="false"></app-shell-header>
+
+<div class="container">
+  <div class="d-flex gap-2 mb-3">
+    <div class="position-relative flex-grow-1">
+      <i class="fa-solid fa-magnifying-glass position-absolute"
+         style="left:.75rem; top:50%; transform:translateY(-50%); color:#888;"></i>
+      <input class="form-control-c" style="padding-left:2rem"
+             placeholder="ค้นหาตามคลัง / หมวด / หมายเหตุ"
+             [value]="term"
+             (input)="search($any($event.target).value)" />
+    </div>
+    <button class="btn btn-mobile-secondary" type="button" (click)="openFilter()" style="flex:0 0 auto; max-width:90px;">
+      <i class="fa-solid fa-filter"></i>
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="text-center text-muted py-3">กำลังโหลด...</div>
+
+  <div *ngIf="!loading && rows.length === 0" class="text-center text-muted py-3">
+    ไม่พบข้อมูล
+  </div>
+
+  <div *ngFor="let row of rows" class="list-item-card" (click)="open(row)" style="cursor:pointer">
+    <div class="icon-col">
+      <i class="fa-solid fa-car fa-2xl text-warning"></i>
+      <span class="badge-bubble">{{ row.totalCount | number }}</span>
+    </div>
+    <div class="flex-grow-1">
+      <div class="fs-5 fw-semibold sarabun">
+        วันที่นับ : {{ row.preparedate | thaidate }}
+      </div>
+      <div class="text-warning">
+        คลัง : {{ row.wareHouseName }}
+      </div>
+      <div class="d-flex flex-wrap gap-2 align-items-center mt-1">
+        <span>พบ</span>
+        <span class="badge rounded-pill text-bg-success">{{ row.foundCount | number }}</span>
+        <span>ขาด</span>
+        <span class="badge rounded-pill text-bg-danger">{{ row.notFoundCount | number }}</span>
+        <span>เกิน</span>
+        <span class="qrts07-excess-badge badge rounded-pill">{{ row.excessCount | number }}</span>
+      </div>
+      <div class="text-gray fs-6 mt-1" *ngIf="row.remark">
+        หมายเหตุ : {{ row.remark }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Advance filter (slide-over) -->
+<ng-template #filterPanel>
+  <form [formGroup]="searchForm" (ngSubmit)="advanceSearch()">
+    <div class="mb-2">
+      <label class="form-label-c">ผู้ขาย</label>
+      <input class="form-control-c" [value]="master.seller?.sellerName || ''" readonly>
+    </div>
+    <div class="mb-2">
+      <label class="form-label-c">วันที่นับ</label>
+      <input type="date" class="form-control-c" formControlName="preparedate">
+    </div>
+    <div class="mb-2">
+      <label class="form-label-c">คลัง</label>
+      <select class="form-select-c" formControlName="wareHouseCode">
+        <option [ngValue]="null">-- ทั้งหมด --</option>
+        <option *ngFor="let w of master.wareHouses" [ngValue]="w.value">{{ w.label }}</option>
+      </select>
+    </div>
+    <div class="mb-2">
+      <label class="form-label-c">หมวดสินค้า</label>
+      <select class="form-select-c" formControlName="productCategoryCode">
+        <option [ngValue]="null">-- ทั้งหมด --</option>
+        <option *ngFor="let c of master.productCategories" [ngValue]="c.value">{{ c.label }}</option>
+      </select>
+    </div>
+    <div class="mb-2">
+      <label class="form-label-c">สถานะ</label>
+      <select class="form-select-c" formControlName="status">
+        <option [ngValue]="null">-- ทั้งหมด --</option>
+        <option *ngFor="let s of master.statuses" [ngValue]="s.value">{{ s.label }}</option>
+      </select>
+    </div>
+
+    <div class="d-flex gap-2 mt-3">
+      <button matRipple class="btn btn-mobile" type="submit">ค้นหา</button>
+      <button matRipple class="btn btn-mobile-secondary" type="button" (click)="clear()">ล้าง</button>
+    </div>
+  </form>
+</ng-template>

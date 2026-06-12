@@ -1,0 +1,147 @@
+/* Global styles for PWA Inventory Count */
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: 'Sarabun', 'Segoe UI', Tahoma, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.sarabun { font-family: 'Sarabun', sans-serif; }
+
+/* Mobile-style container, max width */
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Mobile bottom fixed footer */
+.mobile-footer {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 -2px 6px rgba(0,0,0,.08);
+  display: flex;
+  gap: .5rem;
+  z-index: 5;
+}
+
+.btn-mobile {
+  background-color: #f59e0b;
+  color: #fff;
+  font-weight: 600;
+  padding: .6rem 1rem;
+  border: 0;
+  border-radius: .5rem;
+  flex: 1;
+}
+.btn-mobile:hover { background-color: #d97706; color: #fff; }
+.btn-mobile:disabled { background-color: #c2c2c2; cursor: not-allowed; }
+
+.btn-mobile-secondary {
+  background-color: #6c757d;
+  color: #fff;
+  font-weight: 600;
+  padding: .6rem 1rem;
+  border: 0;
+  border-radius: .5rem;
+  flex: 1;
+}
+.btn-mobile-secondary:hover { background-color: #5a6268; color: #fff; }
+.btn-mobile-secondary:disabled { background-color: #c2c2c2; cursor: not-allowed; }
+
+.text-gray { color: #6c757d; }
+
+/* QRTS07 specific badge color */
+.qrts07-excess-badge {
+  background-color: #ffc107;
+  color: #212529;
+}
+.qrts07-icon-excess { color: #ffc107; }
+
+/* Slide-over panel from right */
+.slide-over-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 1040;
+}
+.slide-over-panel {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: 100%; max-width: 420px;
+  background: #fff; z-index: 1050;
+  overflow-y: auto;
+  box-shadow: -4px 0 12px rgba(0,0,0,.15);
+  display: flex; flex-direction: column;
+}
+.slide-over-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .75rem 1rem; border-bottom: 1px solid #eee;
+}
+
+/* Mobile modal centered overlay */
+.modal-backdrop-c {
+  position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 1060;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.modal-card {
+  background: #fff; border-radius: .75rem;
+  width: 100%; max-width: 460px; padding: 1rem 1rem .75rem;
+  max-height: 90vh; overflow-y: auto;
+}
+.modal-header-c {
+  font-weight: 700; font-size: 1.1rem; margin-bottom: .75rem;
+  padding-bottom: .5rem; border-bottom: 1px solid #eee;
+}
+.modal-action {
+  display: flex; gap: .5rem; margin-top: 1rem;
+}
+
+/* Form display */
+.form-label-c { font-weight: 600; margin-bottom: .25rem; display:block; }
+.form-control-c, .form-select-c {
+  width: 100%; padding: .5rem .75rem; border: 1px solid #ccc; border-radius: .375rem;
+  background: #fff;
+}
+.form-control-c:disabled, .form-control-c[readonly] { background: #f8f9fa; }
+.form-error { color: #dc3545; font-size: .85rem; margin-top: .15rem; }
+
+/* List items */
+.list-item-card {
+  background: #fff; border-radius: .75rem;
+  padding: .75rem; margin-bottom: .75rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  display: flex; gap: .75rem; align-items: flex-start;
+}
+.list-item-card .icon-col {
+  position: relative; width: 56px; flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center;
+}
+.list-item-card .icon-col .badge-bubble {
+  margin-top: .25rem;
+  background: #0d6efd; color: #fff; font-size: .75rem;
+  padding: .15rem .45rem; border-radius: 999px;
+}
+
+/* Snackbar */
+.snackbar {
+  position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+  background: #198754; color: #fff; padding: .6rem 1rem; border-radius: .5rem;
+  z-index: 2000; font-weight: 500;
+  box-shadow: 0 4px 10px rgba(0,0,0,.2);
+}
+.snackbar.error { background: #dc3545; }
+
+/* Header shell */
+.shell-header {
+  background: #f59e0b; color: #fff;
+  padding: .75rem 1rem;
+  display: flex; align-items: center; gap: .75rem;
+  position: sticky; top: 0; z-index: 10;
+  box-shadow: 0 2px 5px rgba(0,0,0,.1);
+}
+.shell-header .back-btn {
+  background: transparent; border: 0; color: #fff; font-size: 1.2rem;
+  cursor: pointer;
+}
+.shell-header .title { font-weight: 600; font-size: 1.1rem; flex: 1; }
