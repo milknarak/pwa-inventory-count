@@ -1,4 +1,4 @@
-// Status flags align with the original AAA eAuction QRTS07 spec.
+// Status flags for the inventory count workflow.
 export const ResultFlag = {
   Wait: 'W',
   Found: 'Y',

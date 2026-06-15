@@ -1,8 +1,14 @@
-# PWA Inventory Count (QRTS07 Practice)
+# PWA Inventory Count
 
+<<<<<<< HEAD
 - **ข้อมูลทั้งหมดเป็น mock** เก็บอยู่ในหน่วยความจำ (ดู `src/app/qrts07/qrts07-mock-data.ts`) — รีเฟรชหน้าแล้วข้อมูลรีเซ็ต
+=======
+โปรเจคฝึกแยกออกมาจาก AAA eAuction QR Management ของ Apple — เน้นเฉพาะหน้าจอ **ตรวจนับสินค้า (Inventory Count)** ในรูปแบบ Angular 21 standalone components + Progressive Web App
+
+- **ข้อมูลทั้งหมดเป็น mock** เก็บอยู่ในหน่วยความจำ (ดู `src/app/inventory-count/inventory-count-mock-data.ts`) — รีเฟรชหน้าแล้วข้อมูลรีเซ็ต
+>>>>>>> e956ac6 (rename qrts07 to inventory-count + fix missing change detection)
 - **ไม่มีระบบ translate** ทุกข้อความถูก hardcode เป็นภาษาไทย
-- เปิด `http://localhost:4200/` แล้วจะเด้งเข้าหน้า QRTS07 ทันที (default route = `/qrts07`)
+- เปิด `http://localhost:4200/` แล้วจะเด้งเข้าหน้าตรวจนับสินค้าทันที (default route = `/inventory-count`)
 
 ## รัน dev server
 
@@ -23,22 +29,22 @@ npm run build                # production build → dist/pwa-inventory-count
 
 ```
 src/app/
-├── app.ts                          (root standalone component, mount router-outlet + global overlays)
-├── app.config.ts                   (providers: router, service-worker)
-├── app.routes.ts                   (router: '' → 'qrts07')
-├── qrts07/
-│   ├── qrts07.model.ts             (interfaces, enums, constants)
-│   ├── qrts07-mock-data.ts         (master + transaction seed data)
-│   ├── qrts07.service.ts           (mock backend ใน memory)
-│   ├── qrts07-list.component.*     (หน้า List + advance filter)
-│   └── qrts07-adjust.component.*   (หน้า Adjust: สแกน/กรอกข้อมูล/confirm)
+├── app.ts                                       (root standalone component, mount router-outlet + global overlays)
+├── app.config.ts                                (providers: router, service-worker)
+├── app.routes.ts                                (router: '' → 'inventory-count')
+├── inventory-count/
+│   ├── inventory-count.model.ts                 (interfaces, enums, constants)
+│   ├── inventory-count-mock-data.ts             (master + transaction seed data)
+│   ├── inventory-count.service.ts               (mock backend ใน memory)
+│   ├── inventory-count-list.component.*         (หน้า List + advance filter)
+│   └── inventory-count-adjust.component.*       (หน้า Adjust: สแกน/กรอกข้อมูล/confirm)
 └── shared/
-    ├── shell-header.component.ts   (header แถบสีส้ม)
-    ├── slide-over.*                (panel เลื่อนจากขวา)
-    ├── mobile-modal.*              (modal กลางจอ + confirm dialog)
-    ├── snackbar.*                  (toast)
-    ├── mock-scan.service.ts        (ใช้ dropdown แทนกล้องสแกน)
-    └── thaidate.pipe.ts            (วันที่ไทย พ.ศ. แบบย่อ)
+    ├── shell-header.component.ts                (header แถบสีส้ม)
+    ├── slide-over.*                             (panel เลื่อนจากขวา)
+    ├── mobile-modal.*                           (modal กลางจอ + confirm dialog)
+    ├── snackbar.*                               (toast)
+    ├── mock-scan.service.ts                     (ใช้ dropdown แทนกล้องสแกน)
+    └── thaidate.pipe.ts                         (วันที่ไทย พ.ศ. แบบย่อ)
 ```
 
 ## ฟีเจอร์ที่พอร์ตมาครบ

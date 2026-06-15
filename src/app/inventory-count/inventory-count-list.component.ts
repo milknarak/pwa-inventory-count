@@ -10,20 +10,20 @@ import { ThaidatePipe } from '../shared/thaidate.pipe';
 
 import {
   DropdownItem, ListQuery, PhyCountHeadListRow,
-} from './qrts07.model';
-import { Qrts07Service } from './qrts07.service';
+} from './inventory-count.model';
+import { InventoryCountService } from './inventory-count.service';
 
 @Component({
-  selector: 'app-qrts07-list',
+  selector: 'app-inventory-count-list',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ShellHeaderComponent, ThaidatePipe],
-  templateUrl: './qrts07-list.component.html',
+  templateUrl: './inventory-count-list.component.html',
 })
-export class Qrts07ListComponent implements OnInit, OnDestroy {
+export class InventoryCountListComponent implements OnInit, OnDestroy {
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  private qs = inject(Qrts07Service);
+  private qs = inject(InventoryCountService);
   private slide = inject(SlideOverService);
 
   private destroy$ = new Subject<void>();
@@ -44,7 +44,7 @@ export class Qrts07ListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.searchForm = this.fb.group({
-      preparedate: [this.toDateInputValue(new Date())],
+      preparedate: [null],
       wareHouseCode: [null],
       productCategoryCode: [null],
       status: [null],
@@ -83,7 +83,7 @@ export class Qrts07ListComponent implements OnInit, OnDestroy {
 
   clear() {
     this.searchForm.reset({
-      preparedate: this.toDateInputValue(new Date()),
+      preparedate: null,
       wareHouseCode: null,
       productCategoryCode: null,
       status: null,
@@ -91,7 +91,7 @@ export class Qrts07ListComponent implements OnInit, OnDestroy {
   }
 
   open(row: PhyCountHeadListRow) {
-    this.router.navigate(['/qrts07/adjust', row.phyCountHeadId]);
+    this.router.navigate(['/inventory-count/adjust', row.phyCountHeadId]);
   }
 
   goDashboard() {
@@ -114,12 +114,5 @@ export class Qrts07ListComponent implements OnInit, OnDestroy {
       this.rows = result.items;
       this.loading = false;
     });
-  }
-
-  private toDateInputValue(d: Date): string {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${y}-${m}-${day}`;
   }
 }

@@ -14,8 +14,8 @@ import { ThaidatePipe } from '../shared/thaidate.pipe';
 import {
   ChangeStatusAction, DropdownItem, HeadStatus, PhyCountHeadDetail, PhyCountItem,
   ResultFlag, ScanResult,
-} from './qrts07.model';
-import { Qrts07Service } from './qrts07.service';
+} from './inventory-count.model';
+import { InventoryCountService } from './inventory-count.service';
 
 interface MasterDropdowns {
   contracts: DropdownItem[];
@@ -25,12 +25,12 @@ interface MasterDropdowns {
 }
 
 @Component({
-  selector: 'app-qrts07-adjust',
+  selector: 'app-inventory-count-adjust',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ShellHeaderComponent, ThaidatePipe],
-  templateUrl: './qrts07-adjust.component.html',
+  templateUrl: './inventory-count-adjust.component.html',
 })
-export class Qrts07AdjustComponent implements OnInit, OnDestroy {
+export class InventoryCountAdjustComponent implements OnInit, OnDestroy {
 
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
@@ -39,7 +39,7 @@ export class Qrts07AdjustComponent implements OnInit, OnDestroy {
   private modal = inject(MobileModalService);
   private slide = inject(SlideOverService);
   private snack = inject(SnackbarService);
-  private qs = inject(Qrts07Service);
+  private qs = inject(InventoryCountService);
   private mockScan = inject(MockScanService);
 
   private destroy$ = new Subject<void>();
@@ -108,7 +108,7 @@ export class Qrts07AdjustComponent implements OnInit, OnDestroy {
     const flag = item.resultFlag;
     if (flag === ResultFlag.Found)    return 'text-success';
     if (flag === ResultFlag.NotFound) return 'text-danger';
-    if (flag === ResultFlag.Over)     return 'qrts07-icon-excess';
+    if (flag === ResultFlag.Over)     return 'inventory-count-icon-excess';
     return 'text-secondary';
   }
 
@@ -284,7 +284,7 @@ export class Qrts07AdjustComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    this.router.navigate(['/qrts07']);
+    this.router.navigate(['/inventory-count']);
   }
 
   private createManualForm() {

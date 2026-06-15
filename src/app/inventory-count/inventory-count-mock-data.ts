@@ -1,6 +1,6 @@
 import {
   DropdownItem, HeadStatus, PhyCountHeadDetail, PhyCountItem, ResultFlag
-} from './qrts07.model';
+} from './inventory-count.model';
 
 // Master mock data
 export const SELLER = { sellerCode: 'S001', sellerName: 'บริษัท นาราก ออคชั่น จำกัด' };

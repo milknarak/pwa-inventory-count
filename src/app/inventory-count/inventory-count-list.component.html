@@ -39,7 +39,7 @@
         <span>ขาด</span>
         <span class="badge rounded-pill text-bg-danger">{{ row.notFoundCount | number }}</span>
         <span>เกิน</span>
-        <span class="qrts07-excess-badge badge rounded-pill">{{ row.excessCount | number }}</span>
+        <span class="inventory-count-excess-badge badge rounded-pill">{{ row.excessCount | number }}</span>
       </div>
       <div class="text-gray fs-6 mt-1" *ngIf="row.remark">
         หมายเหตุ : {{ row.remark }}

@@ -8,12 +8,12 @@
     </div>
     <div class="col-11 d-flex flex-wrap gap-2">
       <span class="badge rounded-pill text-bg-warning">
-        วันที่นับ {{ head?.preparedate | thaidate }}
+        วันที่นับ {{ head.preparedate | thaidate }}
       </span>
-      <span class="badge rounded-pill text-bg-warning" *ngIf="head?.wareHouseName">
+      <span class="badge rounded-pill text-bg-warning" *ngIf="head.wareHouseName">
         คลัง {{ head.wareHouseName }}
       </span>
-      <span class="badge rounded-pill text-bg-warning" *ngIf="head?.productCategoryName">
+      <span class="badge rounded-pill text-bg-warning" *ngIf="head.productCategoryName">
         {{ head.productCategoryName }}
       </span>
     </div>
@@ -47,11 +47,11 @@
   <div class="row text-start mt-2 mb-2 align-items-center">
     <div class="col">
       <span>จำนวนรวม</span>
-      <span class="text-warning fw-semibold mx-1">{{ head?.totalCount | number }}</span>
+      <span class="text-warning fw-semibold mx-1">{{ head.totalCount | number }}</span>
       <span>คัน</span>
 
       <span class="ms-2">ตรวจนับแล้ว</span>
-      <span class="text-warning fw-semibold mx-1">{{ head?.countedCount | number }}</span>
+      <span class="text-warning fw-semibold mx-1">{{ head.countedCount | number }}</span>
       <span>คัน</span>
     </div>
   </div>
@@ -59,11 +59,11 @@
   <div class="row mb-3">
     <div class="col d-flex flex-wrap gap-2">
       <span>พบ</span>
-      <span class="badge rounded-pill text-bg-success">{{ head?.foundCount | number }}</span>
+      <span class="badge rounded-pill text-bg-success">{{ head.foundCount | number }}</span>
       <span>ขาด</span>
-      <span class="badge rounded-pill text-bg-danger">{{ head?.notFoundCount | number }}</span>
+      <span class="badge rounded-pill text-bg-danger">{{ head.notFoundCount | number }}</span>
       <span>เกิน</span>
-      <span class="qrts07-excess-badge badge rounded-pill">{{ head?.excessCount | number }}</span>
+      <span class="inventory-count-excess-badge badge rounded-pill">{{ head.excessCount | number }}</span>
     </div>
   </div>
 </div>
@@ -71,7 +71,7 @@
 <!-- Items list -->
 <div class="container">
   <ul class="list-unstyled">
-    <li *ngFor="let item of head?.phyCounts" class="list-group-item mb-2 p-2 border rounded bg-white">
+    <li *ngFor="let item of head.phyCounts" class="list-group-item mb-2 p-2 border rounded bg-white">
       <div class="d-flex">
         <div class="me-3" style="cursor:pointer" (click)="notFound(item)">
           <i class="fa-solid fa-clipboard fa-2xl" [ngClass]="iconClass(item)"></i>
@@ -176,7 +176,7 @@
 <ng-template #confirmExcess>
   <p class="fs-6 fw-semibold">
     {{ scanResult?.licensePlateNo }} {{ scanResult?.provinceName }}
-    <span class="qrts07-excess-badge badge rounded-pill ms-2">เกิน</span>
+    <span class="inventory-count-excess-badge badge rounded-pill ms-2">เกิน</span>
   </p>
   <p class="text-warning">{{ scanResult?.brandName }} {{ scanResult?.modelName }} {{ scanResult?.color }} {{ scanResult?.year }}</p>
   <p class="text-gray fs-6">เลขที่สัญญา : {{ scanResult?.contractNo }}</p>

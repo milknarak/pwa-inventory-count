@@ -5,18 +5,18 @@ import {
   ChangeStatusAction, CheckItemParams, HeadStatus, ListQuery, PageRequest,
   PageResult, PhyCountHeadDetail, PhyCountHeadListRow, PhyCountItem, ResultFlag,
   SaveAdjust, ScanResult,
-} from './qrts07.model';
+} from './inventory-count.model';
 import {
   EXCESS_POOL, HEADS, newDetailId, PRODUCT_CATEGORIES, PROVINCES,
   REASONS, recomputeHeadCounts, SELLER, STATUSES, WAREHOUSES,
-} from './qrts07-mock-data';
+} from './inventory-count-mock-data';
 
 /**
- * Mock backend for QRTS07. Stores state in memory; refreshing the page
- * resets everything.
+ * Mock backend for the inventory count screen. Stores state in memory;
+ * refreshing the page resets everything.
  */
 @Injectable({ providedIn: 'root' })
-export class Qrts07Service {
+export class InventoryCountService {
 
   private heads = HEADS;
   private excessPool = EXCESS_POOL;

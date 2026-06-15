@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { EXCESS_POOL, HEADS } from '../qrts07/qrts07-mock-data';
+import { EXCESS_POOL, HEADS } from '../inventory-count/inventory-count-mock-data';
 
 /**
  * Real implementation would use a camera + QR-code decoder. For this practice
