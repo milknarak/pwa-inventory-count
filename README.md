@@ -1,7 +1,5 @@
 # PWA Inventory Count (QRTS07 Practice)
 
-โปรเจคฝึกแยกออกมาจาก AAA eAuction QR Management ของ Apple — เน้นเฉพาะหน้าจอ **QRTS07 (ตรวจนับสินค้า)** ในรูปแบบ Angular 21 standalone components + Progressive Web App
-
 - **ข้อมูลทั้งหมดเป็น mock** เก็บอยู่ในหน่วยความจำ (ดู `src/app/qrts07/qrts07-mock-data.ts`) — รีเฟรชหน้าแล้วข้อมูลรีเซ็ต
 - **ไม่มีระบบ translate** ทุกข้อความถูก hardcode เป็นภาษาไทย
 - เปิด `http://localhost:4200/` แล้วจะเด้งเข้าหน้า QRTS07 ทันที (default route = `/qrts07`)
